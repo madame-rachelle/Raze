@@ -583,7 +583,7 @@ size_t __fastcall Gv_GetArrayCountForAllocSize(int const arrayIdx, size_t const 
 
     Bassert(denominator);
 
-    return tabledivide64(filelength + denominator - 1, denominator);
+    return (filelength + denominator - 1) / denominator;
 }
 
 typedef int (*gamearray_func_cb)(int);

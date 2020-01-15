@@ -5198,7 +5198,7 @@ ACTOR_STATIC void G_MoveMisc(void)  // STATNUM 5
                 case NEON4__STATIC:
                 case NEON5__STATIC:
                 case NEON6__STATIC:
-                    pSprite->shade = ((tabledivide32_noinline(g_globalRandom, pSprite->lotag + 1) & 31) > 4) ? -127 : 127;
+                    pSprite->shade = (((g_globalRandom / (pSprite->lotag + 1)) & 31) > 4) ? -127 : 127;
                     goto next_sprite;
 
                 case BLOODSPLAT1__STATIC:
@@ -6408,7 +6408,7 @@ ACTOR_STATIC void G_MoveEffectors(void)   //STATNUM 3
 
             //    if(t[5] > 0) { t[5]--; break; }
 
-            if ((tabledivide32_noinline(g_globalRandom, spriteHitag+1)&31) < 4 && !pData[2])
+            if (((g_globalRandom / (spriteHitag+1))&31) < 4 && !pData[2])
             {
                 //       t[5] = 4+(g_globalRandom&7);
                 pSector->ceilingpal = pSprite->owner >> 8;
@@ -6450,7 +6450,7 @@ ACTOR_STATIC void G_MoveEffectors(void)   //STATNUM 3
             //  t[3]: max wall shade
             int lightFlag;
 
-            if ((tabledivide32_noinline(g_globalRandom, spriteHitag+1)&31) < 4)
+            if ((((g_globalRandom / spriteHitag+1))&31) < 4)
             {
                 pData[1]            = pSprite->shade + (g_globalRandom & 15);  // Got really bright
                 pData[0]            = pSprite->shade + (g_globalRandom & 15);

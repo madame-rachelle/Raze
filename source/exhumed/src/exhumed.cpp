@@ -1505,12 +1505,8 @@ static inline int32_t calc_smoothratio(ClockTicks totalclk, ClockTicks ototalclk
     if (bRecord || bPlayback || nFreeze != 0 || bCamera || bPause)
         return 65536;
     int32_t rfreq = (refreshfreq != -1 ? refreshfreq : 60);
-    uint64_t elapsedFrames = tabledivide64(((uint64_t) (totalclk - ototalclk).toScale16()) * rfreq, 65536*120);
-#if 0
-    //POGO: additional debug info for testing purposes
-    OSD_Printf("Elapsed frames: %" PRIu64 ", smoothratio: %" PRIu64 "\n", elapsedFrames, tabledivide64(65536*elapsedFrames*30, rfreq));
-#endif
-    return clamp(tabledivide64(65536*elapsedFrames*30, rfreq), 0, 65536);
+    uint64_t elapsedFrames = (((uint64_t) (totalclk - ototalclk).toScale16()) * rfreq) / (65536*120);
+    return clamp((65536*elapsedFrames*30) / rfreq, 0, 65536);
 }
 
 #define COLOR_RED redcol

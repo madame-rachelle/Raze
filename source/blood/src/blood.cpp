@@ -413,7 +413,7 @@ void PreloadCache(void)
 #if 0
             if (videoGetRenderMode() != REND_CLASSIC && totalclock - clock > (kTicRate>>2))
             {
-                int const percentComplete = min(100, tabledivide32_noinline(100 * cnt, nPrecacheCount));
+                int const percentComplete = min(100, (100 * cnt) / nPrecacheCount);
 
                 // this just prevents the loading screen percentage bar from making large jumps
                 while (percentDisplayed < percentComplete)

@@ -208,7 +208,6 @@ static void getclosestpointonwall_internal(vec2_t const p, int32_t const dawall,
     }
 
     i = ((i << 15) / j) << 15;
-    //i = tabledivide64((i << 15), j) << 15;
 
     *closest = { (int32_t)(w.x + ((d.x * i) >> 30)), (int32_t)(w.y + ((d.y * i) >> 30)) };
 }
@@ -2280,7 +2279,7 @@ static inline void wallmosts_finish(int16_t *mostbuf, int32_t z1, int32_t z2,
 #endif
     // PK 20110423: a bit consistency checking is a good thing:
     int32_t const tmp = (ix2 - ix1 >= 0) ? (ix2 - ix1 + 1) : 1;
-    int32_t const yinc = tabledivide32((scale(z2, xdimenscale, iy2) << 4) - y, tmp);
+    int32_t const yinc = ((scale(z2, xdimenscale, iy2) << 4) - y) / tmp;
 
     qinterpolatedown16short((intptr_t)&mostbuf[ix1], tmp, y + (globalhoriz << 16), yinc);
 
@@ -2594,7 +2593,7 @@ static int32_t setup_globals_cf1(usectorptr_t sec, int32_t pal, int32_t zd,
     {
         vec2_t const xy = { wall[wall[sec->wallptr].point2].x - wall[sec->wallptr].x,
                             wall[wall[sec->wallptr].point2].y - wall[sec->wallptr].y };
-        i = nsqrtasm(uhypsq(xy.x,xy.y)); if (i == 0) i = 1024; else i = tabledivide32(1048576, i);
+        i = nsqrtasm(uhypsq(xy.x,xy.y)); if (i == 0) i = 1024; else i = 1048576/ i;
         int const wcos = mulscale6(xy.x, i), wsin = mulscale6(xy.y, i);
         globalx1 = dmulscale14(wcos,singlobalang,-wsin,cosglobalang);
         globaly1 = dmulscale14(wcos,cosglobalang,wsin,singlobalang);
@@ -5412,7 +5411,7 @@ draw_as_face_sprite:
         int32_t hplc = divscale19(xdimenscale,sy1);
         const int32_t hplc2 = divscale19(xdimenscale,sy2);
         const int32_t idiv = sx2-sx1;
-        int32_t hinc[4] = { idiv ? tabledivide32(hplc2-hplc, idiv) : 0 };
+        int32_t hinc[4] = { idiv ? (hplc2-hplc) / idiv : 0 };
 
 #ifdef HIGH_PRECISION_SPRITE
         float const cc     = ((1<<19) * fxdimen * (float)yxaspect) * (1.f/320.f);
@@ -6379,12 +6378,12 @@ static void dosetaspect(void)
                 if (xdimen < 1 << 11)
                 {
                     for (i = 1; i < DISTRECIPSIZ; i++)
-                        distrecip[i] = tabledivide32(xdimen << 20, i);
+                        distrecip[i] = (xdimen << 20) / i;
                 }
                 else
                 {
                     for (i = 1; i < DISTRECIPSIZ; i++)
-                        distrecip[i] = tabledivide64((uint64_t)xdimen << 20, i);
+                        distrecip[i] = ((uint64_t)xdimen << 20) / i;
                 }
             }
 
@@ -6699,7 +6698,7 @@ int32_t lintersect(const int32_t originX, const int32_t originY, const int32_t o
 
             t = rayDotLineEndDiff;
         }
-        t = tabledivide64(t << 24L, rayLengthSquared);
+        t = (t << 24L) / rayLengthSquared;
 
         *intersectionX = originX + mulscale24(ray.x, t);
         *intersectionY = originY + mulscale24(ray.y, t);
@@ -6717,7 +6716,7 @@ int32_t lintersect(const int32_t originX, const int32_t originY, const int32_t o
     // u is < 0 if (originDiffCrossRay^rayCrossLineVec) & signBit
     // t is > 1 if klabs(originDiffCrossLineVec) > klabs(rayCrossLineVec)
     // u is > 1 if klabs(originDiffCrossRay) > klabs(rayCrossLineVec)
-    // where int32_t u = tabledivide64(((int64_t) originDiffCrossRay) << 24L, rayCrossLineVec);
+    // where int32_t u = (((int64_t) originDiffCrossRay) << 24L) / rayCrossLineVec;
     if (((originDiffCrossLineVec^rayCrossLineVec) & signBit) ||
         ((originDiffCrossRay^rayCrossLineVec) & signBit) ||
         klabs(originDiffCrossLineVec) > klabs(rayCrossLineVec) ||
@@ -6727,10 +6726,10 @@ int32_t lintersect(const int32_t originX, const int32_t originY, const int32_t o
         return 0;
     }
 
-    int64_t t = tabledivide64(((int64_t) originDiffCrossLineVec) << 24L, rayCrossLineVec);
+    int64_t t = (((int64_t) originDiffCrossLineVec) << 24L) / rayCrossLineVec;
     // For sake of completeness/readability, alternative to the above approach for an early out & avoidance of an extra division:
 #if 0
-    int64_t u = tabledivide64(((int64_t) originDiffCrossRay) << 24L, rayCrossLineVec);
+    int64_t u = (((int64_t) originDiffCrossRay) << 24L) / rayCrossLineVec;
     if (u < 0 || u > 1 << 24 || t < 0 || t > 1 << 24)
     {
         return 0;
@@ -6807,12 +6806,12 @@ int32_t rintersect(int32_t x1, int32_t y1, int32_t z1,
     else if (bot < 0 && (topt > 0 || topu > 0 || topu <= bot))
         return -1;
 
-    int64_t t = tabledivide64_noinline(topt<<16, bot);
+    int64_t t = (topt<<16) / bot;
     *intx = x1 + ((vx*t)>>16);
     *inty = y1 + ((vy*t)>>16);
     *intz = z1 + ((vz*t)>>16);
 
-    t = tabledivide64_noinline(topu<<16, bot);
+    t = (topu<<16) / bot;
 
     Bassert((unsigned)t < 65536);
 
@@ -6924,7 +6923,6 @@ static tspritetype tsprite_s[MAXSPRITESONSCREEN];
 int32_t enginePreInit(void)
 {
 	polymost_initosdfuncs();
-    initdivtables();
 
 #if !defined DEBUG_MAIN_ARRAYS
     sector = sector_s;
@@ -8201,11 +8199,11 @@ void renderDrawMapView(int32_t dax, int32_t day, int32_t zoome, int16_t ang)
 
             //relative alignment stuff
             ox = v2.x-v1.x; oy = v2.y-v1.y;
-            i = ox*ox+oy*oy; if (i == 0) continue; i = tabledivide32_noinline(65536*16384, i);
+            i = ox*ox+oy*oy; if (i == 0) continue; i = (65536*16384) / i;
             globalx1 = mulscale10(dmulscale10(ox,bakgvect.x,oy,bakgvect.y),i);
             globaly1 = mulscale10(dmulscale10(ox,bakgvect.y,-oy,bakgvect.x),i);
             ox = v1.y-v4.y; oy = v4.x-v1.x;
-            i = ox*ox+oy*oy; if (i == 0) continue; i = tabledivide32_noinline(65536*16384, i);
+            i = ox*ox+oy*oy; if (i == 0) continue; i = (65536*16384) / i;
             globalx2 = mulscale10(dmulscale10(ox,bakgvect.x,oy,bakgvect.y),i);
             globaly2 = mulscale10(dmulscale10(ox,bakgvect.y,-oy,bakgvect.x),i);
 
@@ -8816,7 +8814,7 @@ static void videoAllocateBuffers(void)
       mirrorBuffer.Resize(xdim * ydim);
 
     ysavecnt = YSAVES;
-    nodesperline = tabledivide32_noinline(YSAVES, ydim);
+    nodesperline = YSAVES / ydim;
 
     if (videoGetRenderMode() == REND_CLASSIC)
     {

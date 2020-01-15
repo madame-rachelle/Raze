@@ -967,7 +967,7 @@ void G_DrawRooms(int32_t playerNum, int32_t smoothRatio)
                 renderSetAspect(viewingRange, yxaspect);
             else
             {
-                yxAspect     = tabledivide32_noinline(65536 * ydim * 8, xdim * 5);
+                yxAspect     = (65536 * ydim * 8) / (xdim * 5);
 
                 renderSetAspect(mulscale16(viewingRange,viewingrange), yxaspect);
             }
@@ -1061,7 +1061,7 @@ void G_DrawRooms(int32_t playerNum, int32_t smoothRatio)
                 renderSetAspect(mulscale16(oviewingrange, vRange >> 1), yxaspect);
 
                 viewingRange = vRange >> 1;
-                yxAspect     = tabledivide32_noinline(65536 * ydim * 8, xdim * 5);
+                yxAspect     = (65536 * ydim * 8) / (xdim * 5);
             }
         }
         else if (videoGetRenderMode() >= REND_POLYMOST && (ud.screen_tilting
@@ -1153,7 +1153,7 @@ void G_DrawRooms(int32_t playerNum, int32_t smoothRatio)
             else
             {
                 viewingRange = pPlayer->drug_aspect;
-                yxAspect = tabledivide32_noinline(65536 * ydim * 8, xdim * 5);
+                yxAspect = (65536 * ydim * 8) / (xdim * 5);
 
                 renderSetAspect(mulscale16(viewingRange, viewingrange), yxaspect);
             }
@@ -5270,7 +5270,7 @@ default_case1:
                 l = pSprite->z-actor[g_player[playerNum].ps->i].floorz+(3<<8);
                 // SET_SPRITE_NOT_TSPRITE
                 if (l > 1024 && pSprite->yrepeat > 32 && pSprite->extra > 0)
-                    pSprite->yoffset = (int8_t)tabledivide32_noinline(l, pSprite->yrepeat<<2);
+                    pSprite->yoffset = (int8_t)(l / (pSprite->yrepeat<<2));
                 else pSprite->yoffset=0;
             }
 
@@ -7738,8 +7738,8 @@ void A_SpawnWallGlass(int spriteNum, int wallNum, int glassCnt)
     v1.x -= ksgn(v.y);
     v1.y += ksgn(v.x);
 
-    v.x = tabledivide32_noinline(v.x, glassCnt+1);
-    v.y = tabledivide32_noinline(v.y, glassCnt+1);
+    v.x /= (glassCnt+1);
+    v.y /= (glassCnt+1);
 
     int16_t sect = -1;
 
@@ -7783,8 +7783,8 @@ void A_SpawnWallPopcorn(int spriteNum, int wallNum, int glassCnt)
     v1.x -= ksgn(v.y);
     v1.y += ksgn(v.x);
 
-    v.x = tabledivide32_noinline(v.x, glassCnt+1);
-    v.y = tabledivide32_noinline(v.y, glassCnt+1);
+    v.x /= (glassCnt+1);
+    v.y /= (glassCnt+1);
 
     int16_t sect = -1;
 
@@ -7830,8 +7830,8 @@ void A_SpawnCeilingGlass(int spriteNum, int sectNum, int glassCnt)
     for (bssize_t wallNum = startWall; wallNum < (endWall - 1); wallNum++)
     {
         vec2_t v1 = { wall[wallNum].x, wall[wallNum].y };
-        vec2_t v  = { tabledivide32_noinline(wall[wallNum + 1].x - v1.x, glassCnt + 1),
-                     tabledivide32_noinline(wall[wallNum + 1].y - v1.y, glassCnt + 1) };
+        vec2_t v  = { (wall[wallNum + 1].x - v1.x) / (glassCnt + 1),
+                     (wall[wallNum + 1].y - v1.y) / (glassCnt + 1) };
 
         for (bsize_t j = glassCnt; j > 0; j--)
         {
@@ -7862,8 +7862,8 @@ void A_SpawnRandomGlass(int spriteNum, int wallNum, int glassCnt)
     }
 
     vec2_t v1 = { wall[wallNum].x, wall[wallNum].y };
-    vec2_t v  = { tabledivide32_noinline(wall[wall[wallNum].point2].x - wall[wallNum].x, glassCnt + 1),
-                 tabledivide32_noinline(wall[wall[wallNum].point2].y - wall[wallNum].y, glassCnt + 1) };
+    vec2_t v  = { (wall[wall[wallNum].point2].x - wall[wallNum].x) / (glassCnt + 1),
+                 (wall[wall[wallNum].point2].y - wall[wallNum].y) / (glassCnt + 1) };
     int16_t sectNum = sprite[spriteNum].sectnum;
 
     for (bsize_t j = glassCnt; j > 0; j--)

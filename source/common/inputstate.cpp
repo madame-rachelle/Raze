@@ -83,9 +83,9 @@ void InputState::GetMouseDelta(ControlInfo * info)
 	if (in_mousebias)
 	{
 		if (abs(info->mousex) > abs(info->mousey))
-			info->mousey = tabledivide32_noinline(info->mousey, in_mousebias);
+			info->mousey = info->mousey / in_mousebias;
 		else
-			info->mousex = tabledivide32_noinline(info->mousex, in_mousebias);
+			info->mousex = info->mousex / in_mousebias;
 	}
 
 }

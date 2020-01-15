@@ -146,8 +146,8 @@ static void Proj_DoWaterTracers(vec3_t startPos, vec3_t const *endPos, int n, in
     if ((klabs(startPos.x - endPos->x) + klabs(startPos.y - endPos->y)) < 3084)
         return;
 
-    vec3_t const v_inc = { tabledivide32_noinline(endPos->x - startPos.x, n + 1), tabledivide32_noinline(endPos->y - startPos.y, n + 1),
-                           tabledivide32_noinline(endPos->z - startPos.z, n + 1) };
+    vec3_t const v_inc = { (endPos->x - startPos.x) / (n + 1), (endPos->y - startPos.y) / (n + 1),
+                           (endPos->z - startPos.z) / (n + 1) };
 
     for (bssize_t i=n; i>0; i--)
     {
@@ -317,7 +317,7 @@ static int GetAutoAimAng(int spriteNum, int playerNum, int projecTile, int zAdju
             zCenter -= ZOFFSET3;
 
         int spriteDist = safeldist(g_player[playerNum].ps->i, &sprite[returnSprite]);
-        *pZvel         = tabledivide32_noinline((pSprite->z - startPos->z - zCenter) * projVel, spriteDist);
+        *pZvel         = ((pSprite->z - startPos->z - zCenter) * projVel) / spriteDist;
 
         if (!(aimFlags&2) || sprite[returnSprite].picnum != RECON)
             *pAng = getangle(pSprite->x-startPos->x, pSprite->y-startPos->y);
@@ -409,7 +409,7 @@ static void A_PreFireHitscan(const spritetype *pSprite, vec3_t * const srcVect, 
 
     srcVect->z -= ZOFFSET6;
 
-    *zvel = tabledivide32_noinline((pPlayer->pos.z - srcVect->z) << 8, playerDist);
+    *zvel = ((pPlayer->pos.z - srcVect->z) << 8) / playerDist;
 
     if (pSprite->picnum == BOSS1)
         *shootAng = getangle(pPlayer->pos.x - srcVect->x, pPlayer->pos.y - srcVect->y);
@@ -589,7 +589,7 @@ growspark_rr:
                 {
                     int32_t   playerDist;
                     int const playerSprite = g_player[A_FindPlayer(pSprite, &playerDist)].ps->i;
-                    Zvel                   = tabledivide32_noinline((sprite[playerSprite].z - startPos.z) << 8, playerDist + 1);
+                    Zvel                   = ((sprite[playerSprite].z - startPos.z) << 8) / (playerDist + 1);
                     shootAng             = getangle(sprite[playerSprite].x - startPos.x, sprite[playerSprite].y - startPos.y);
                 }
             }
@@ -883,7 +883,7 @@ growspark_rr:
                 else
                     shootAng += 16 - (krand2() & 31);
                 hitData.pos.x         = safeldist(g_player[otherPlayer].ps->i, pSprite);
-                Zvel                  = tabledivide32_noinline((g_player[otherPlayer].ps->opos.z - startPos.z + (3 << 8)) * vel, hitData.pos.x);
+                Zvel                  = ((g_player[otherPlayer].ps->opos.z - startPos.z + (3 << 8)) * vel) / (hitData.pos.x);
             }
 
             int spriteSize = (playerNum >= 0) ? 7 : 8;
@@ -1000,7 +1000,7 @@ growspark_rr:
                 else
                     shootAng           += 16 - (krand2() & 31);
                 hitData.pos.x         = safeldist(g_player[otherPlayer].ps->i, pSprite);
-                Zvel                  = tabledivide32_noinline((g_player[otherPlayer].ps->opos.z - startPos.z + (3 << 8)) * vel, hitData.pos.x);
+                Zvel                  = ((g_player[otherPlayer].ps->opos.z - startPos.z + (3 << 8)) * vel) / hitData.pos.x;
             }
 
             int spriteSize = 18;
@@ -1116,7 +1116,7 @@ growspark_rr:
                     startPos.z += 24<<8;
                 }
 
-                Zvel = tabledivide32_noinline((g_player[otherSprite].ps->opos.z - startPos.z) * vel, safeldist(g_player[otherSprite].ps->i, pSprite));
+                Zvel = ((g_player[otherSprite].ps->opos.z - startPos.z) * vel) / safeldist(g_player[otherSprite].ps->i, pSprite);
 
                 if (A_CheckEnemySprite(pSprite) && (AC_MOVFLAGS(pSprite, &actor[spriteNum]) & face_player_smart))
                     shootAng = pSprite->ang + (krand2() & 31) - 16;
@@ -1325,8 +1325,8 @@ growspark_rr:
             else if (pSprite->statnum != STAT_EFFECTOR)
             {
                 int const otherPlayer = A_FindPlayer(pSprite, NULL);
-                Zvel                  = tabledivide32_noinline((g_player[otherPlayer].ps->opos.z - startPos.z) * 512,
-                                              safeldist(g_player[otherPlayer].ps->i, pSprite));
+                Zvel                  = ((g_player[otherPlayer].ps->opos.z - startPos.z) * 512) /
+                                              safeldist(g_player[otherPlayer].ps->i, pSprite);
             }
             else
                 Zvel = 0;
@@ -1519,7 +1519,7 @@ static void G_DrawWeaponTile(int weaponX, int weaponY, int weaponTile, int weapo
                 // HACK: Draw the upper part of the chaingun two screen
                 // pixels (not texels; multiplied by weapon scale) lower
                 // first, preventing ugly horizontal seam.
-                g_dts_yadd = tabledivide32_noinline(65536 * 2 * 200, ydim);
+                g_dts_yadd = (65536 * 2 * 200) / ydim;
                 G_DrawTileScaled(weaponX, weaponY, weaponTile, shadef, weaponBits, weaponPal);
                 g_dts_yadd = 0;
             }

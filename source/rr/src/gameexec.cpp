@@ -211,7 +211,7 @@ int32_t A_GetFurthestAngle(int const spriteNum, int const angDiv)
 
     int32_t   furthestAngle = 0;
     int32_t   greatestDist  = INT32_MIN;
-    int const angIncs       = tabledivide32_noinline(2048, angDiv);
+    int const angIncs       = 2048 / angDiv;
     hitdata_t hit;
 
     for (native_t j = pSprite->ang; j < (2048 + pSprite->ang); j += angIncs)
@@ -240,7 +240,7 @@ int A_FurthestVisiblePoint(int const spriteNum, uspritetype * const ts, vec2_t *
     const uspritetype *const pnSprite = (uspritetype *)&sprite[spriteNum];
 
     hitdata_t hit;
-    int const angincs = ((!g_netServer && ud.multimode < 2) && ud.player_skill < 3) ? 2048 / 2 : tabledivide32_noinline(2048, 1 + (krand2() & 1));
+    int const angincs = ((!g_netServer && ud.multimode < 2) && ud.player_skill < 3) ? 2048 / 2 : 2048 / (1 + (krand2() & 1));
 
     for (native_t j = ts->ang; j < (2048 + ts->ang); j += (angincs-(krand2()&511)))
     {

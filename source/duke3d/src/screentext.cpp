@@ -550,7 +550,7 @@ vec2_t G_ScreenText(const int32_t font,
             {
                 size.x = xbetween;
 
-                xbetween = (length == 1) ? 0 : tabledivide32_noinline((xbetween - linewidth), (length - 1));
+                xbetween = (length == 1) ? 0 : (xbetween - linewidth) / (length - 1);
 
                 linewidth = size.x;
             }
@@ -564,7 +564,7 @@ vec2_t G_ScreenText(const int32_t font,
         if (f & TEXT_YJUSTIFY)
         {
             const int32_t tempswap = ybetween;
-            ybetween = (lines == 1) ? 0 : tabledivide32_noinline(ybetween - size.y, lines - 1);
+            ybetween = (lines == 1) ? 0 : (ybetween - size.y) / (lines - 1);
             size.y = tempswap;
         }
 
@@ -739,7 +739,7 @@ vec2_t G_ScreenText(const int32_t font,
 
                 if (f & TEXT_XJUSTIFY)
                 {
-                    xbetween = (length == 1) ? 0 : tabledivide32_noinline(xbetween - linewidth, length - 1);
+                    xbetween = (length == 1) ? 0 : (xbetween - linewidth) / (length - 1);
 
                     linewidth = size.x;
                 }

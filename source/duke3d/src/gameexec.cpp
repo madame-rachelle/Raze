@@ -338,7 +338,7 @@ int A_GetFurthestAngle(int const spriteNum, int const angDiv)
         return (pSprite->ang + 1024) & 2047;
 
     int       furthestAngle = 0;
-    int const angIncs       = tabledivide32_noinline(2048, angDiv);
+    int const angIncs       = 2048 / angDiv;
     int32_t   greatestDist  = INT32_MIN;
     hitdata_t hit;
 
@@ -369,7 +369,6 @@ int A_FurthestVisiblePoint(int const spriteNum, uspriteptr_t const ts, vec2_t * 
 
     hitdata_t hit;
     int const angincs = 128;
-//    ((!g_netServer && ud.multimode < 2) && ud.player_skill < 3) ? 2048 / 2 : tabledivide32_noinline(2048, 1 + (krand() & 1));
 
     for (native_t j = ts->ang; j < (2048 + ts->ang); j += (angincs /*-(krand()&511)*/))
     {
@@ -1958,7 +1957,7 @@ GAMEEXEC_STATIC void VM_Execute(int const loop /*= false*/)
 #ifdef CON_DISCRETE_VAR_ACCESS
             vInstruction(CON_DIVVAR_GLOBAL):
                 insptr++;
-                aGameVars[*insptr].global = tabledivide32(aGameVars[*insptr].global, insptr[1]);
+                aGameVars[*insptr].global /= insptr[1];
                 insptr += 2;
                 dispatch();
 
@@ -1967,7 +1966,7 @@ GAMEEXEC_STATIC void VM_Execute(int const loop /*= false*/)
                 insptr++;
                 auto &v = aGameVars[*insptr].pValues[vm.playerNum & (MAXPLAYERS - 1)];
 
-                v = tabledivide32(v, insptr[1]);
+                v /= insptr[1];
                 insptr += 2;
                 dispatch();
             }
@@ -1977,7 +1976,7 @@ GAMEEXEC_STATIC void VM_Execute(int const loop /*= false*/)
                 insptr++;
                 auto &v = aGameVars[*insptr].pValues[vm.spriteNum & (MAXSPRITES - 1)];
 
-                v = tabledivide32(v, insptr[1]);
+                v /= insptr[1];
                 insptr += 2;
                 dispatch();
             }
@@ -5916,7 +5915,7 @@ badindex:
                         abort_after_error();
                     }
 
-                    Gv_SetVar(tw, tabledivide32((dividend + ksgn(dividend) * klabs(divisor / 2)), divisor));
+                    Gv_SetVar(tw, ((dividend + ksgn(dividend) * klabs(divisor / 2))) / divisor);
                     dispatch();
                 }
 
@@ -5934,7 +5933,7 @@ badindex:
                         abort_after_error();
                     }
 
-                    Gv_SetVar(tw, tabledivide32((dividend + ksgn(dividend) * klabs(divisor) + 1), divisor));
+                    Gv_SetVar(tw, ((dividend + ksgn(dividend) * klabs(divisor) + 1)) / divisor);
                     dispatch();
                 }
 

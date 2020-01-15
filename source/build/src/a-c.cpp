@@ -530,7 +530,7 @@ void tvlineasm2(uint32_t vplc2, int32_t vinc1, intptr_t bufplc1, intptr_t bufplc
 {
     char ch;
 
-    bssize_t cnt = tabledivide32(asm2-p-1, bpl);  // >= 1
+    bssize_t cnt = (asm2-p-1) / bpl;  // >= 1
     const int32_t vinc2 = asm1;
 
     const char *const A_C_RESTRICT buf1 = (char *)bufplc1;

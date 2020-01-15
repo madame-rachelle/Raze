@@ -770,8 +770,8 @@ void G_OperateSectors(int sectNum, int spriteNum)
             vect.y += wall[i].y;
         }
 
-        vect.x = tabledivide32_noinline(vect.x, (endWall-startWall+1));
-        vect.y = tabledivide32_noinline(vect.y, (endWall-startWall+1));
+        vect.x = vect.x / (endWall-startWall+1);
+        vect.y = vect.y / (endWall-startWall+1);
 
         //find any points with either same x or same y coordinate
         //  as center (dax, day) - should be 2 points found.

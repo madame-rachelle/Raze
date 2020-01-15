@@ -637,7 +637,7 @@ void G_CacheMapData(void)
         if (bpp > 8 && totalclock - tc > TICRATE/4)
         {
             /*Bsprintf(tempbuf,"%d resources remaining\n",g_precacheCount-pc+1);*/
-            int percentage = min(100, tabledivide32_noinline(100 * pc, g_precacheCount));
+            int percentage = min(100, (100 * pc) / g_precacheCount);
 
             while (percentage > lpc)
             {

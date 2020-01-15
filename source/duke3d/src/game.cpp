@@ -1079,7 +1079,7 @@ void G_DrawRooms(int32_t playerNum, int32_t smoothRatio)
     if (r_usenewaspect)
     {
         newaspect_enable = 0;
-        renderSetAspect(viewingRange, tabledivide32_noinline(65536 * ydim * 8, xdim * 5));
+        renderSetAspect(viewingRange, (65536 * ydim * 8) / (xdim * 5));
     }
 
     VM_OnEvent(EVENT_DISPLAYROOMSEND, g_player[screenpeek].ps->i, screenpeek);
@@ -3896,7 +3896,7 @@ void G_DoSpriteAnimations(int32_t ourx, int32_t oury, int32_t ourz, int32_t oura
                 l = pSprite->z-actor[g_player[playerNum].ps->i].floorz+(3<<8);
                 // SET_SPRITE_NOT_TSPRITE
                 if (l > 1024 && pSprite->yrepeat > 32 && pSprite->extra > 0)
-                    t->yoffset = (int8_t)tabledivide32_noinline(l, pSprite->yrepeat<<2);
+                    t->yoffset = (int8_t)(l / (pSprite->yrepeat<<2));
                 else t->yoffset=0;
             }
 
@@ -6269,8 +6269,8 @@ void A_SpawnWallGlass(int spriteNum, int wallNum, int glassCnt)
     v1.x -= ksgn(v.y);
     v1.y += ksgn(v.x);
 
-    v.x = tabledivide32_noinline(v.x, glassCnt+1);
-    v.y = tabledivide32_noinline(v.y, glassCnt+1);
+    v.x = v.x / (glassCnt+1);
+    v.y = v.y / (glassCnt+1);
 
     int16_t sect = -1;
 
@@ -6312,8 +6312,8 @@ void A_SpawnCeilingGlass(int spriteNum, int sectNum, int glassCnt)
     for (bssize_t wallNum = startWall; wallNum < (endWall - 1); wallNum++)
     {
         vec2_t v1 = { wall[wallNum].x, wall[wallNum].y };
-        vec2_t v  = { tabledivide32_noinline(wall[wallNum + 1].x - v1.x, glassCnt + 1),
-                     tabledivide32_noinline(wall[wallNum + 1].y - v1.y, glassCnt + 1) };
+        vec2_t v  = { (wall[wallNum + 1].x - v1.x) / (glassCnt + 1),
+                     (wall[wallNum + 1].y - v1.y) / (glassCnt + 1) };
 
         for (int j = glassCnt; j > 0; j--)
         {
@@ -6340,8 +6340,8 @@ void A_SpawnRandomGlass(int spriteNum, int wallNum, int glassCnt)
     }
 
     vec2_t v1 = { wall[wallNum].x, wall[wallNum].y };
-    vec2_t v  = { tabledivide32_noinline(wall[wall[wallNum].point2].x - wall[wallNum].x, glassCnt + 1),
-                 tabledivide32_noinline(wall[wall[wallNum].point2].y - wall[wallNum].y, glassCnt + 1) };
+    vec2_t v  = { (wall[wall[wallNum].point2].x - wall[wallNum].x) / (glassCnt + 1),
+                 (wall[wall[wallNum].point2].y - wall[wallNum].y) / (glassCnt + 1) };
     int16_t sectNum = sprite[spriteNum].sectnum;
 
     for (int j = glassCnt; j > 0; j--)

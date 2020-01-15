@@ -245,9 +245,9 @@ static void palaccum_add(palaccum_t *pa, const palette_t *pal, int32_t f)
 
 static void G_FadePalaccum(const palaccum_t *pa)
 {
-    videoFadePalette(tabledivide32_noinline(pa->r, pa->sumf)<<2,
-        tabledivide32_noinline(pa->g, pa->sumf)<<2,
-        tabledivide32_noinline(pa->b, pa->sumf)<<2, pa->maxf<<2);
+    videoFadePalette((pa->r / pa->sumf)<<2,
+        (pa->g / pa->sumf)<<2,
+        (pa->b / pa->sumf)<<2, pa->maxf<<2);
 }
 
 
