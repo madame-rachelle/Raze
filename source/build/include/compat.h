@@ -1217,14 +1217,8 @@ static inline void maybe_grow_buffer(char ** const buffer, int32_t * const buffe
 
 ////////// Inlined external libraries //////////
 
-#ifndef LIBDIVIDE_BODY
-# define LIBDIVIDE_HEADER_ONLY
-#endif
-#define LIBDIVIDE_C_HEADERS
-#define LIBDIVIDE_NONAMESPACE
-#define LIBDIVIDE_NOINLINE
+
 #include "fix16.h"
-#include "libdivide.h"
 #include "clockticks.hpp"
 #include "vectors.h"
 

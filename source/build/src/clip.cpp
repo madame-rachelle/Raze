@@ -632,14 +632,14 @@ int32_t clipsprite_try(uspriteptr_t const spr, int32_t xmin, int32_t ymin, int32
         if ((spr->cstat&CSTAT_SPRITE_ALIGNMENT)!=CSTAT_SPRITE_ALIGNMENT_FLOOR)
         {
             int32_t const tempint1 = clipmapinfo.sector[k].CM_XREPEAT;
-            maxcorrection = divideu32_noinline(maxcorrection * (int32_t) spr->xrepeat, tempint1);
+            maxcorrection = divideu32(maxcorrection * (int32_t) spr->xrepeat, tempint1);
         }
         else
         {
             int32_t const tempint1 = clipmapinfo.sector[k].CM_XREPEAT;
             int32_t const tempint2 = clipmapinfo.sector[k].CM_YREPEAT;
-            maxcorrection = max(divideu32_noinline(maxcorrection * (int32_t) spr->xrepeat, tempint1),
-                divideu32_noinline(maxcorrection * (int32_t) spr->yrepeat, tempint2));
+            maxcorrection = max(divideu32(maxcorrection * (int32_t) spr->xrepeat, tempint1),
+                divideu32(maxcorrection * (int32_t) spr->yrepeat, tempint2));
         }
 
         maxcorrection -= MAXCLIPDIST;

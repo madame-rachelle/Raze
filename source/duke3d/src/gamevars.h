@@ -235,52 +235,11 @@ static FORCE_INLINE void __fastcall VM_SetStruct(uint32_t const flags, intptr_t 
         }                                                                                              \
     }
 
-static FORCE_INLINE void __fastcall Gv_DivVar(int const id, int32_t const d)
-{
-    using namespace libdivide;
-
-    static libdivide_s32_t sdiv;
-    static int32_t lastValue;
-
-    auto &var = aGameVars[id];
-    auto *dptr = &sdiv;
-    auto iptr = &var.global;
-
-    if ((unsigned)d < DIVTABLESIZE)
-        dptr = &divtable32[d];
-    else if (d != lastValue)
-        sdiv = libdivide_s32_gen((lastValue = d));
-    
-    switch (var.flags & (GAMEVAR_USER_MASK | GAMEVAR_PTR_MASK))
-    {
-        case GAMEVAR_PERACTOR: iptr = &var.pValues[vm.spriteNum & (MAXSPRITES-1)]; goto jmp;
-        case GAMEVAR_PERPLAYER: iptr = &var.pValues[vm.playerNum & (MAXPLAYERS-1)]; fallthrough__;
-        default: jmp: *iptr = libdivide_s32_do(*iptr, dptr); break;
-
-        case GAMEVAR_INT32PTR:
-        {
-            auto &value = *(int32_t *)var.pValues;
-            value = libdivide_s32_do(value, dptr);
-            break;
-        }
-        case GAMEVAR_INT16PTR:
-        {
-            auto &value = *(int16_t *)var.pValues;
-            value = (int16_t)libdivide_s32_do(value, dptr);
-            break;
-        }
-        case GAMEVAR_Q16PTR:
-        {
-            auto &value = *(fix16_t *)var.pValues;
-            value = fix16_div(value, fix16_from_int(d));
-            break;
-        }
-    }
-}
 
 VM_GAMEVAR_OPERATOR(Gv_AddVar, +=)
 VM_GAMEVAR_OPERATOR(Gv_SubVar, -=)
 VM_GAMEVAR_OPERATOR(Gv_MulVar, *=)
+VM_GAMEVAR_OPERATOR(Gv_DivVar, /=)
 VM_GAMEVAR_OPERATOR(Gv_ModVar, %=)
 VM_GAMEVAR_OPERATOR(Gv_AndVar, &=)
 VM_GAMEVAR_OPERATOR(Gv_XorVar, ^=)

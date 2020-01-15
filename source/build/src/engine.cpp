@@ -4665,7 +4665,7 @@ static void classicDrawVoxel(int32_t dasprx, int32_t daspry, int32_t dasprz, int
     daxscale = scale(daxscale, xdimenscale, xdimen<<8);
     dayscale = scale(dayscale, mulscale16(xdimenscale,viewingrangerecip), xdimen<<8);
 
-    const int32_t daxscalerecip = divideu32_noinline(1<<30, daxscale);
+    const int32_t daxscalerecip = divideu32(1<<30, daxscale);
 
     int32_t *longptr = (int32_t *)davoxptr;
     const int32_t daxsiz = B_LITTLE32(longptr[0]), daysiz = B_LITTLE32(longptr[1]), dazsiz = B_LITTLE32(longptr[2]);

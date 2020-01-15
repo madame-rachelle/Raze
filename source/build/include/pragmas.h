@@ -30,61 +30,17 @@ extern int32_t reciptable[2048], fpuasm;
 #define wo(x) ((int16_t)(x))  // word cast
 #define by(x) ((uint8_t)(x))  // byte cast
 
-#define DIVTABLESIZE 16384
-
-extern libdivide::libdivide_s64_t divtable64[DIVTABLESIZE];
-extern libdivide::libdivide_s32_t divtable32[DIVTABLESIZE];
-extern void initdivtables(void);
-
 static inline uint32_t divideu32(uint32_t const n, uint32_t const d)
 {
-    static libdivide::libdivide_u32_t udiv;
-    static uint32_t lastd;
-
-    if (d == lastd)
-        goto skip;
-
-    udiv = libdivide::libdivide_u32_gen((lastd = d));
-skip:
-    return libdivide::libdivide_u32_do(n, &udiv);
-}
-
-static inline int64_t tabledivide64(int64_t const n, int64_t const d)
-{
-    static libdivide::libdivide_s64_t sdiv;
-    static int32_t lastd;
-    auto const dptr = ((unsigned)d < DIVTABLESIZE) ? &divtable64[d] : &sdiv;
-
-    if (d == lastd || dptr != &sdiv)
-        goto skip;
-
-    sdiv = libdivide::libdivide_s64_gen((lastd = d));
-skip:
-    return libdivide::libdivide_s64_do(n, dptr);
-}
-
-static inline int32_t tabledivide32(int32_t const n, int32_t const d)
-{
-    static libdivide::libdivide_s32_t sdiv;
-    static int32_t lastd;
-    auto const dptr = ((unsigned)d < DIVTABLESIZE) ? &divtable32[d] : &sdiv;
-
-    if (d == lastd || dptr != &sdiv)
-        goto skip;
-
-    sdiv = libdivide::libdivide_s32_gen((lastd = d));
-skip:
-    return libdivide::libdivide_s32_do(n, dptr);
+	return n / d;
 }
 
 extern uint32_t divideu32_noinline(uint32_t n, uint32_t d);
-extern int32_t tabledivide32_noinline(int32_t n, int32_t d);
-extern int64_t tabledivide64_noinline(int64_t n, int64_t d);
 
 
-static inline int32_t divscale(int32_t eax, int32_t ebx, int32_t ecx) { return dw(tabledivide64(qw(eax) << by(ecx), ebx)); }
+static inline int32_t divscale(int32_t eax, int32_t ebx, int32_t ecx) { return dw((qw(eax) << by(ecx)) / ebx); }
 
-static inline int64_t divscale64(int64_t eax, int64_t ebx, int64_t ecx) { return tabledivide64(eax << ecx, ebx); }
+static inline int64_t divscale64(int64_t eax, int64_t ebx, int64_t ecx) { return (eax << ecx) / ebx; }
 
 #define EDUKE32_SCALER_PRAGMA(a) \
     static FORCE_INLINE int32_t divscale##a(int32_t eax, int32_t ebx) { return divscale(eax, ebx, a); }
@@ -93,12 +49,12 @@ EDUKE32_GENERATE_PRAGMAS EDUKE32_SCALER_PRAGMA(32)
 
 static inline int32_t scale(int32_t eax, int32_t edx, int32_t ecx)
 {
-    return dw(tabledivide64(qw(eax) * edx, ecx));
+    return dw((qw(eax) * edx) / ecx);
 }
 
 static FORCE_INLINE int32_t scaleadd(int32_t eax, int32_t edx, int32_t addend, int32_t ecx)
 {
-    return dw(tabledivide64(qw(eax) * edx + addend, ecx));
+    return dw((qw(eax) * edx + addend) / ecx);
 }
 
 static inline int32_t roundscale(int32_t eax, int32_t edx, int32_t ecx)
