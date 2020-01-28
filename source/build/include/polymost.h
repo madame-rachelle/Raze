@@ -160,6 +160,33 @@ class PolymostRendermode : public Rendermode
     void renderSetRollAngle(int32_t rolla) override;
 };
 
+class HardwareRendermode : public Rendermode
+{
+  public:
+    void outputGLDebugMessage(uint8_t severity, const char *format, ...) override;
+    void gltexapplyprops() override;
+    void glreset() override;
+    void uploadbasepalette(int32_t basepalnum) override;
+    void uploadpalswaps(int count, int32_t *palookupnum) override;
+    int32_t maskWallHasTranslucency(uwalltype const *const wall) override;
+    int32_t spriteHasTranslucency(tspritetype const *const tspr) override;
+    void scansector(int32_t sectnum) override;
+    void drawrooms() override;
+    void drawmaskwall(int32_t damaskwallcnt) override;
+    void prepareMirror(int32_t dax, int32_t day, int32_t daz, fix16_t daang, fix16_t dahoriz, int16_t mirrorWall) override;
+    void completeMirror() override;
+    void prepare_loadboard() override;
+    void drawsprite(int32_t snum) override;
+    void dorotatespritemodel(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum, int8_t dashade, uint8_t dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend, int32_t uniqid) override;
+    void initosdfuncs() override;
+    void PrecacheHardwareTextures(int nTile) override;
+    void Startup() override;
+    int32_t voxdraw(voxmodel_t *m, tspriteptr_t const tspr) override;
+    int32_t md3draw(md3model_t *m, tspriteptr_t tspr) override;
+    void renderSetRollAngle(int32_t rolla) override;
+};
+
 extern PolymostRendermode polymost_rendermode;
+extern HardwareRendermode hardware_rendermode;
 
 #endif

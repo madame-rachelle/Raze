@@ -90,16 +90,16 @@ CUSTOM_CVAR(Int, vid_rendermode, 4, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOIN
 		self = 4;
 	}
 
-#if 0
-	if (usergame)
-	{
-		// [SP] Update pitch limits to the netgame/gamesim.
-		players[consoleplayer].SendPitchLimits();
-	}
-#endif
 	screen->SetTextureFilterMode();
 
-	// No further checks needed. All this changes now is which scene drawer the render backend calls.
+	if (self == 4)
+    {
+        rendermode = &polymost_rendermode;
+    }
+    else
+    {
+        rendermode = &hardware_rendermode;
+    }
 }
 
 CUSTOM_CVAR(Int, vid_preferbackend, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)

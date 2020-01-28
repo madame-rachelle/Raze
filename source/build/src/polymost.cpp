@@ -5341,6 +5341,7 @@ static void renderSetRollAngle(int32_t rolla)
 
 Rendermode *rendermode = nullptr;
 PolymostRendermode polymost_rendermode;
+HardwareRendermode hardware_rendermode;
 
 void PolymostRendermode::outputGLDebugMessage(uint8_t severity, const char* format, ...)
 {
@@ -5444,4 +5445,94 @@ int32_t PolymostRendermode::md3draw(md3model_t *m, tspriteptr_t tspr)
 void PolymostRendermode::renderSetRollAngle(int32_t rolla)
 {
     ::renderSetRollAngle(rolla);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+void HardwareRendermode::outputGLDebugMessage(uint8_t severity, const char* format, ...)
+{
+}
+
+void HardwareRendermode::gltexapplyprops()
+{
+}
+
+void HardwareRendermode::glreset()
+{
+}
+
+void HardwareRendermode::uploadbasepalette(int32_t basepalnum)
+{
+}
+
+void HardwareRendermode::uploadpalswaps(int count, int32_t *palookupnum)
+{
+}
+
+int32_t HardwareRendermode::maskWallHasTranslucency(uwalltype const *const wall)
+{
+    return 0;
+}
+
+int32_t HardwareRendermode::spriteHasTranslucency(tspritetype const *const tspr)
+{
+    return 0;
+}
+
+void HardwareRendermode::scansector(int32_t sectnum)
+{
+}
+
+void HardwareRendermode::drawrooms()
+{
+}
+
+void HardwareRendermode::drawmaskwall(int32_t damaskwallcnt)
+{
+}
+
+void HardwareRendermode::prepareMirror(int32_t dax, int32_t day, int32_t daz, fix16_t daang, fix16_t dahoriz, int16_t mirrorWall)
+{
+}
+
+void HardwareRendermode::completeMirror()
+{
+}
+
+void HardwareRendermode::prepare_loadboard()
+{
+}
+
+void HardwareRendermode::drawsprite(int32_t snum)
+{
+}
+
+void HardwareRendermode::dorotatespritemodel(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum, int8_t dashade, uint8_t dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend, int32_t uniqid)
+{
+}
+
+void HardwareRendermode::initosdfuncs()
+{
+}
+
+void HardwareRendermode::PrecacheHardwareTextures(int nTile)
+{
+}
+
+void HardwareRendermode::Startup()
+{
+}
+
+int32_t HardwareRendermode::voxdraw(voxmodel_t *m, tspriteptr_t const tspr)
+{
+    return 0;
+}
+
+int32_t HardwareRendermode::md3draw(md3model_t *m, tspriteptr_t tspr)
+{
+    return 0;
+}
+
+void HardwareRendermode::renderSetRollAngle(int32_t rolla)
+{
 }
