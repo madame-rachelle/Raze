@@ -1074,10 +1074,6 @@ int32_t wallvisible(int32_t const x, int32_t const y, int16_t const wallnum);
 
 int32_t   videoSetRenderMode(int32_t renderer);
 
-#ifdef USE_OPENGL
-void    renderSetRollAngle(int32_t rolla);
-#endif
-
 //  pal: pass -1 to invalidate all palettes for the tile, or >=0 for a particular palette
 //  how: pass -1 to invalidate all instances of the tile in texture memory, or a bitfield
 //         bit 0: opaque or masked (non-translucent) texture, using repeating
@@ -1091,10 +1087,7 @@ void    renderSetRollAngle(int32_t rolla);
 //       clamping is for sprites, repeating is for walls
 void tileInvalidate(int16_t tilenume, int32_t pal, int32_t how);
 
-void polymost_glreset(void);
 void polymost_precache(int32_t dapicnum, int32_t dapalnum, int32_t datype);
-void PrecacheHardwareTextures(int nTile);
-void Polymost_Startup();
 
 typedef uint16_t polytintflags_t;
 
@@ -1110,7 +1103,6 @@ enum {
 };
 
 extern int32_t gltexmaxsize;
-void gltexapplyprops (void);
 void texcache_invalidate(void);
 
 EXTERN_CVAR(Bool, hw_detailmapping)

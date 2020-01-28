@@ -143,7 +143,7 @@ void doTileLoad(int i)
 	tileLoad(i);
 
 #ifdef USE_OPENGL
-	if (r_precache) PrecacheHardwareTextures(i);
+	if (r_precache) rendermode->PrecacheHardwareTextures(i);
 #endif
 
 }

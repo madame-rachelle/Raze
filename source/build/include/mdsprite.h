@@ -213,7 +213,8 @@ EXTERN voxmodel_t *voxmodels[MAXVOXELS];
 void voxfree(voxmodel_t *m);
 voxmodel_t *voxload(const char *filnam);
 voxmodel_t *loadkvxfrombuf(const char *buffer, int32_t length);
-int32_t polymost_voxdraw(voxmodel_t *m, tspriteptr_t const tspr);
+
+extern vec3f_t *vertlist;
 
 int      md3postload_polymer(md3model_t* m);
 //int32_t md_thinoutmodel(int32_t modelid, uint8_t *usedframebitmap);

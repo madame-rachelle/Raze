@@ -682,7 +682,7 @@ void paletteSetColorTable(int32_t id, uint8_t const * const table, bool transien
 #ifdef USE_OPENGL
     if (videoGetRenderMode() >= REND_POLYMOST)
     {
-        uploadbasepalette(id);
+        rendermode->uploadbasepalette(id);
     }
 #endif
 }

@@ -179,7 +179,7 @@ bool GameInterface::LoadGame(FSaveGameNode* node)
 #endif
 
 #ifdef USE_OPENGL
-    Polymost_prepare_loadboard();
+    rendermode->prepare_loadboard();
 #endif
 
 #ifdef POLYMER

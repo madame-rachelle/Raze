@@ -1912,7 +1912,7 @@ static void postloadplayer(int32_t savegamep)
 #endif
 
 #ifdef USE_OPENGL
-    Polymost_prepare_loadboard();
+    rendermode->prepare_loadboard();
 #endif
 
 #ifdef POLYMER

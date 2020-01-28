@@ -3192,7 +3192,7 @@ void viewDrawScreen(bool sceneonly)
         int tiltcs, tiltdim;
         char v4 = powerupCheck(gView, kPwUpCrystalBall) > 0;
 #ifdef USE_OPENGL
-        renderSetRollAngle(0);
+        rendermode->renderSetRollAngle(0);
 #endif
         if (v78 || bDelirium)
         {
@@ -3223,7 +3223,7 @@ void viewDrawScreen(bool sceneonly)
             }
 #ifdef USE_OPENGL
             else
-                renderSetRollAngle(v78);
+                rendermode->renderSetRollAngle(v78);
 #endif
         }
         else if (v4 && gNetPlayers > 1)

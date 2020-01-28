@@ -646,7 +646,7 @@ int dbLoadMap(const char *pPath, int *pX, int *pY, int *pZ, short *pAngle, short
     #endif
 
 #ifdef USE_OPENGL
-    Polymost_prepare_loadboard();
+    rendermode->prepare_loadboard();
 #endif
 
 	DICTNODE* pNode;

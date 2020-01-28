@@ -709,7 +709,7 @@ static void yax_scanbunches(int32_t bbeg, int32_t numhere, const uint8_t *lastgo
                     classicScanSector(k);
 #ifdef USE_OPENGL
                 else
-                    polymost_scansector(k);
+                    rendermode->scansector(k);
 #endif
                 if (numbunches > 0)
                 {
@@ -6111,7 +6111,7 @@ static void renderDrawSprite(int32_t snum)
         return;
 #ifdef USE_OPENGL
     case REND_POLYMOST:
-        polymost_drawsprite(snum);
+        rendermode->drawsprite(snum);
         return;
 #endif
     }
@@ -6125,7 +6125,7 @@ static void renderDrawMaskedWall(int16_t damaskwallcnt)
 {
     //============================================================================= //POLYMOST BEGINS
 #ifdef USE_OPENGL
-    if (videoGetRenderMode() == REND_POLYMOST) { polymost_drawmaskwall(damaskwallcnt); return; }
+    if (videoGetRenderMode() == REND_POLYMOST) { rendermode->drawmaskwall(damaskwallcnt); return; }
 #endif
     //============================================================================= //POLYMOST ENDS
 
@@ -6842,7 +6842,7 @@ static tspritetype tsprite_s[MAXSPRITESONSCREEN];
 
 int32_t enginePreInit(void)
 {
-	polymost_initosdfuncs();
+    rendermode->initosdfuncs();
     initdivtables();
 
 #if !defined DEBUG_MAIN_ARRAYS
@@ -6947,7 +6947,7 @@ int32_t enginePostInit(void)
 void engineUnInit(void)
 {
 #ifdef USE_OPENGL
-    polymost_glreset();
+    rendermode->glreset();
     hicinit();
     freeallmodels();
 # ifdef POLYMER
@@ -7185,7 +7185,7 @@ int32_t renderDrawRoomsQ16(int32_t daposx, int32_t daposy, int32_t daposz,
 
 #ifdef USE_OPENGL
     //============================================================================= //POLYMOST BEGINS
-    polymost_drawrooms();
+    rendermode->drawrooms();
 
     if (videoGetRenderMode() != REND_CLASSIC)
         return inpreparemirror;
@@ -7561,7 +7561,7 @@ void renderDrawMasks(void)
         int32_t back = i;
         for (; i >= 0; --i)
         {
-            if (polymost_spriteHasTranslucency(&tsprite[i]))
+            if (rendermode->spriteHasTranslucency(&tsprite[i]))
             {
                 tspriteptr[spritesortcnt] = &tsprite[i];
                 ++spritesortcnt;
@@ -7701,7 +7701,7 @@ killsprite:
         maskwallcnt = 0;
         for (i = 0; i < numMaskWalls; i++)
         {
-            if (polymost_maskWallHasTranslucency((uwalltype *) &wall[thewall[maskwall[i]]]))
+            if (rendermode->maskWallHasTranslucency((uwalltype *)&wall[thewall[maskwall[i]]]))
             {
                 maskwall[maskwallcnt] = maskwall[i];
                 maskwallcnt++;
@@ -8168,7 +8168,7 @@ static void enginePrepareLoadBoard(FileReader & fr, vec3_t *dapos, int16_t *daan
 #endif
 
 #ifdef USE_OPENGL
-    Polymost_prepare_loadboard();
+    rendermode->prepare_loadboard();
 #endif
 
     if (!have_maptext())
@@ -10076,7 +10076,7 @@ void rotatesprite_(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
 
     if (hw_models && tile2model[picnum].hudmem[(dastat & 4) >> 2])
     {
-        polymost_dorotatespritemodel(sx, sy, z, a, picnum, dashade, dapalnum, dastat, daalpha, dablend, guniqhudid);
+        rendermode->dorotatespritemodel(sx, sy, z, a, picnum, dashade, dapalnum, dastat, daalpha, dablend, guniqhudid);
         return;
     }
     // We must store all calls in the 2D drawer so that the backend can operate on a clean 3D view.
@@ -10290,7 +10290,7 @@ void renderPrepareMirror(int32_t dax, int32_t day, int32_t daz, fix16_t daang, f
 
 #ifdef USE_OPENGL
     if (videoGetRenderMode() == REND_POLYMOST)
-        polymost_prepareMirror(dax, day, daz, daang, dahoriz, dawall);
+        rendermode->prepareMirror(dax, day, daz, daang, dahoriz, dawall);
 #endif
 }
 
@@ -10302,7 +10302,7 @@ void renderCompleteMirror(void)
 {
 #ifdef USE_OPENGL
     if (videoGetRenderMode() == REND_POLYMOST)
-        polymost_completeMirror();
+        rendermode->completeMirror();
 #endif
 
     // Don't try to complete a mirror if we haven't drawn the reflection for one
@@ -10684,13 +10684,3 @@ int32_t videoSetRenderMode(int32_t renderer)
 
     return 0;
 }
-
-//
-// setrollangle
-//
-#ifdef USE_OPENGL
-void renderSetRollAngle(int32_t rolla)
-{
-    gtang = (float)rolla * (fPI * (1.f/1024.f));
-}
-#endif

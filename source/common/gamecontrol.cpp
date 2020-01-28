@@ -605,6 +605,8 @@ int RunGame()
 		initprintf("An error occurred while initializing ENet.\n");
 #endif
 
+	rendermode = &polymost_rendermode;
+
 	auto usedgroups = SetupGame();
 
 

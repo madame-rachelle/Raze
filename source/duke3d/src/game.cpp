@@ -676,7 +676,7 @@ void G_DrawRooms(int32_t playerNum, int32_t smoothRatio)
                                       + mulscale16(((pSprite->ang + 1024 - actor[ud.camerasprite].tempang) & 2047) - 1024, smoothRatio));
 
 #ifdef USE_OPENGL
-        renderSetRollAngle(0);
+        rendermode->renderSetRollAngle(0);
 #endif
 
         int const noDraw = VM_OnEventWithReturn(EVENT_DISPLAYROOMSCAMERA, ud.camerasprite, playerNum, 0);
@@ -809,12 +809,12 @@ void G_DrawRooms(int32_t playerNum, int32_t smoothRatio)
         {
             if (ud.screen_tilting)
             {
-                renderSetRollAngle(pPlayer->orotscrnang + mulscale16(((pPlayer->rotscrnang - pPlayer->orotscrnang + 1024)&2047)-1024, smoothRatio));
+                rendermode->renderSetRollAngle(pPlayer->orotscrnang + mulscale16(((pPlayer->rotscrnang - pPlayer->orotscrnang + 1024)&2047)-1024, smoothRatio));
                 pPlayer->orotscrnang = pPlayer->rotscrnang;
             }
             else
             {
-                renderSetRollAngle(0);
+                rendermode->renderSetRollAngle(0);
             }
         }
 

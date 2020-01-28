@@ -466,7 +466,7 @@ void G_CacheMapData(void)
 			tileLoad(i);
 
 #ifdef USE_OPENGL
-		if (r_precache) PrecacheHardwareTextures(i);
+		if (r_precache) rendermode->PrecacheHardwareTextures(i);
 #endif
 
         if ((++cnt & 7) == 0)

@@ -561,7 +561,7 @@ int32_t Anim_Play(const char *fn)
 
 end_anim_restore_gl:
     hw_texfilter = ogltexfiltermode;
-    gltexapplyprops();
+    rendermode->gltexapplyprops();
 end_anim:
     inputState.ClearAllInput();
 	anim->animbuf = nullptr;

@@ -623,7 +623,7 @@ void G_CacheMapData(void)
 				tileLoad(i);
 
 #ifdef USE_OPENGL
-			if (r_precache) PrecacheHardwareTextures(i);
+			if (r_precache) rendermode->PrecacheHardwareTextures(i);
 #endif
 			j++;
             pc++;
@@ -2548,7 +2548,7 @@ void G_SetFog(int fogtype)
         {
             //gltexinvalidatetype(INVALIDATE_ALL_NON_INDEXED);
 			static int swaps[] = { 0, 30, 33, 23, 8 };
-            uploadpalswaps(5, swaps);
+            rendermode->uploadpalswaps(5, swaps);
         }
 #endif
     }
